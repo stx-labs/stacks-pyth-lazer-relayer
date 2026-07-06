@@ -1,0 +1,73 @@
+openapi: 3.0.3
+info:
+  title: Stacks Pyth Lazer Relayer API
+  description: API reference for the Stacks Pyth Lazer Relayer API. Service that
+    relays price updates from the Pyth Network to the Stacks blockchain.
+  version: v0.0.1
+components:
+  schemas: {}
+paths:
+  /pyth-lazer-relayer/v1/price-update:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              minProperties: 1
+              maxProperties: 1
+              type: object
+              properties:
+                symbol:
+                  pattern: ^Crypto\.[A-Za-z0-9]+/[A-Za-z0-9]+$
+                  description: Pyth Lazer crypto symbol, e.g. "Crypto.BTC/USD"
+                  type: string
+                  example: Crypto.BTC/USD
+                feed_id:
+                  minimum: 0
+                  description: Pyth Lazer numeric feed id
+                  type: integer
+                  example: 1
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                  - symbol
+                properties:
+                  message:
+                    type: string
+                  symbol:
+                    pattern: ^Crypto\.[A-Za-z0-9]+/[A-Za-z0-9]+$
+                    description: Pyth Lazer crypto symbol, e.g. "Crypto.BTC/USD"
+                    type: string
+                    example: Crypto.BTC/USD
+        "400":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+servers:
+  - url: https://api.hiro.so/
+    description: mainnet
+  - url: https://api.testnet.hiro.so/
+    description: testnet
+tags:
+  - name: Price Updates
+    description: Price update endpoints
+externalDocs:
+  url: https://github.com/stx-labs/stacks-pyth-lazer-relayer
+  description: Source Repository

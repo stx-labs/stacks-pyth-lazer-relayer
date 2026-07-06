@@ -38,8 +38,8 @@ export async function buildApiServer(config: ApiConfig) {
     endpoint: null,
     promClient: promClient,
   });
-  await fastify.register(Api, { ...config, prefix: '/relayer/v1' });
-  await fastify.register(Api, { ...config, prefix: '/relayer' });
+  await fastify.register(Api, { ...config, prefix: '/pyth-lazer-relayer/v1' });
+  await fastify.register(Api, { ...config, prefix: '/pyth-lazer-relayer' });
 
   return fastify;
 }

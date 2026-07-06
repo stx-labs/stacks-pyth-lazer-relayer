@@ -1,4 +1,55 @@
 import { Type } from '@sinclair/typebox';
+import { isProdEnv, logger, SERVER_VERSION } from '@stacks/api-toolkit';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
+import { readFileSync } from 'node:fs';
+import type { SwaggerOptions } from '@fastify/swagger';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const openApiVersion = (() => {
+  if (isProdEnv) return SERVER_VERSION.tag;
+  try {
+    const packageJsonPath = resolve(__dirname, '../../package.json');
+    return (JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as { version: string }).version;
+  } catch (error) {
+    logger.error(error, 'Error reading version from package.json');
+    return SERVER_VERSION.tag;
+  }
+})();
+
+export const OpenApiSchemaOptions: SwaggerOptions = {
+  openapi: {
+    info: {
+      title: 'Stacks Pyth Lazer Relayer API',
+      description:
+        'API reference for the Stacks Pyth Lazer Relayer API. Service that relays price updates from the Pyth Network to the Stacks blockchain.',
+      version: openApiVersion,
+    },
+    externalDocs: {
+      url: 'https://github.com/stx-labs/stacks-pyth-lazer-relayer',
+      description: 'Source Repository',
+    },
+    servers: [
+      {
+        url: 'https://api.hiro.so/',
+        description: 'mainnet',
+      },
+      {
+        url: 'https://api.testnet.hiro.so/',
+        description: 'testnet',
+      },
+    ],
+    tags: [
+      {
+        name: 'Price Updates',
+        description: 'Price update endpoints',
+      },
+    ],
+  },
+};
 
 /**
  * A Pyth Lazer crypto symbol, e.g. `Crypto.BTC/USD`. We only relay crypto pairs, so the symbol must
