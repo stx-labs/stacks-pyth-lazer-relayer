@@ -1,0 +1,53 @@
+{
+  "name": "relayer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Pyth Lazer relayer for Stacks",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "main": "dist/index.js",
+  "exports": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node --watch src/index.ts",
+    "start": "node dist/index.js",
+    "test:price-update-planner": "NODE_ENV=test node --import tsx --test --test-concurrency=1 ./tests/price-update-planner.test.ts",
+    "test:pyth-symbol-monitor": "NODE_ENV=test node --import tsx --test --experimental-test-module-mocks --test-concurrency=1 ./tests/pyth-symbol-monitor.test.ts",
+    "test:price-update-transaction-submitter": "NODE_ENV=test node --import tsx --test --experimental-test-module-mocks --test-concurrency=1 ./tests/price-update-transaction-submitter.test.ts",
+    "test:contract-symbol-price-reader": "NODE_ENV=test node --import tsx --test --experimental-test-module-mocks --test-concurrency=1 ./tests/contract-symbol-price-reader.test.ts",
+    "test:price-update-route": "NODE_ENV=test node --import tsx --test --test-concurrency=1 ./tests/price-update-route.test.ts",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "license": "MIT",
+  "prettier": "@stacks/prettier-config",
+  "devDependencies": {
+    "@stacks/api-test-toolkit": "^1.13.0",
+    "@stacks/eslint-config": "^3.0.0-develop.2",
+    "@types/node": "^25.9.3",
+    "eslint": "^10.5.0",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-tsdoc": "^0.5.2",
+    "prettier": "^3.8.4",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/type-provider-typebox": "^6.1.0",
+    "@pythnetwork/pyth-lazer-sdk": "^6.2.2",
+    "@sinclair/typebox": "^0.34.49",
+    "@stacks/api-toolkit": "^1.13.0",
+    "@stacks/rpc-client": "^2.0.1",
+    "@stacks/transactions": "^7.4.0",
+    "bignumber.js": "^11.1.4",
+    "env-schema": "^7.0.0",
+    "fastify": "^5.8.5",
+    "fastify-metrics": "^13.2.0",
+    "lru-cache": "^11.5.1",
+    "prom-client": "^15.1.3"
+  }
+}
