@@ -1,6 +1,6 @@
 {
   "name": "relayer",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Pyth Lazer relayer for Stacks",
   "type": "module",
@@ -19,7 +19,7 @@
     "test:contract-symbol-price-reader": "NODE_ENV=test node --import tsx --test --experimental-test-module-mocks --test-concurrency=1 ./tests/contract-symbol-price-reader.test.ts",
     "test:price-update-route": "NODE_ENV=test node --import tsx --test --test-concurrency=1 ./tests/price-update-route.test.ts",
     "typecheck": "tsc --noEmit",
-    "generate:openapi": "rimraf ./openapi.yaml && node --import tsx ./src/openapi-generator.ts",
+    "generate:openapi": "rimraf ./openapi.yaml && NODE_ENV=development node --import tsx ./src/openapi-generator.ts",
     "generate:git-info": "rimraf .git-info && node_modules/.bin/api-toolkit-git-info",
     "clean": "rm -rf dist"
   },
