@@ -41,10 +41,9 @@ echo ""
 echo "Updating root package.json..."
 npm version "$VERSION" --no-git-tag-version
 
-# Generate OpenAPI schema and client
-echo "Generating OpenAPI schema and client..."
+# Generate OpenAPI schema
+echo "Generating OpenAPI schema..."
 npm run generate:openapi
-npm run generate:client
 
 echo ""
 echo "Done! Version ${VERSION} updated in all package files."
