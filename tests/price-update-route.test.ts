@@ -3,7 +3,7 @@ import { strict as assert } from 'node:assert';
 import type { FastifyInstance } from 'fastify';
 import { buildApiServer, type ApiConfig } from '../src/api/init.ts';
 
-const URL = '/relayer/v1/price-update';
+const URL = '/pyth-lazer-relayer/v1/price-update';
 
 // Fakes for the dependencies the route touches.
 const requestPriceUpdate = mock.fn((_symbol: string): boolean => true);
