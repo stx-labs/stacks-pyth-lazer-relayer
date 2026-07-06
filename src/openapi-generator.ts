@@ -3,7 +3,7 @@ import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { Api } from '../src/api/init.js';
 import FastifySwagger from '@fastify/swagger';
 import { writeFileSync } from 'fs';
-import { OpenApiSchemaOptions } from '../src/api/schemas.js';
+import { OpenApiSchemaOptions } from './api/schemas.js';
 import type { PythSymbolMonitor } from './relayer/pyth-symbol-monitor.ts';
 import type { PriceUpdatePlanner } from './relayer/price-update-planner.ts';
 
