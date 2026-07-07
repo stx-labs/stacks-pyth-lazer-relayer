@@ -1,4 +1,5 @@
-import { logger, PINO_LOGGER_CONFIG, registerShutdownConfig } from '@stacks/api-toolkit';
+import { logger, PINO_LOGGER_CONFIG, registerShutdownConfig, timeout } from '@stacks/api-toolkit';
+import { createCoreRpcClient } from '@stacks/rpc-client';
 import { buildApiServer } from './api/init.js';
 import { ENV } from './env.js';
 import { PythSymbolMonitor } from './relayer/pyth-symbol-monitor.ts';
@@ -70,10 +71,36 @@ async function initApiService(config: ApiConfig) {
 }
 
 /**
+ * Validates the Stacks node RPC is reachable by probing `/v2/info` and blocking until it succeeds.
+ * @param rpcBaseUrl - Base URL of the Stacks node RPC endpoint.
+ */
+async function waitForStacksNode(rpcBaseUrl: string) {
+  const client = createCoreRpcClient({ baseUrl: rpcBaseUrl });
+  logger.info(`Connecting to Stacks node at ${rpcBaseUrl}...`);
+  const stacksNodeProbeRetryMs = 3_000;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      const info = await client.request('GET', '/v2/info');
+      logger.info(
+        `Connected to Stacks node at ${rpcBaseUrl} (network id: ${info.network_id}, stacks tip height: ${info.stacks_tip_height})`
+      );
+      return;
+    } catch (error) {
+      logger.warn(
+        error,
+        `Stacks node at ${rpcBaseUrl} not reachable (attempt ${attempt}), retrying in ${stacksNodeProbeRetryMs}ms...`
+      );
+      await timeout(stacksNodeProbeRetryMs);
+    }
+  }
+}
+
+/**
  * Initializes the application.
  */
 async function initApp() {
   const nodeRpcBaseUrl = `${ENV.STACKS_NODE_RPC_SCHEME}://${ENV.STACKS_NODE_RPC_HOST}:${ENV.STACKS_NODE_RPC_PORT}`;
+  await waitForStacksNode(nodeRpcBaseUrl);
 
   const reader = new ContractSymbolPriceReader({
     sender: ENV.PYTH_DEPLOYER_STACKS_ADDRESS,
