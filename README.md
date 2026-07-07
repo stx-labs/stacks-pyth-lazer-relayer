@@ -1,11 +1,5 @@
 # Pyth Lazer relayer
 
-> **Status: proof of concept.** The pipeline described below is implemented and
-> unit-tested. On-chain submission has been exercised on testnet. It is not yet
-> production-hardened — see [Known limitations](#known-limitations).
-
-## Role
-
 A relayer is the off-chain half of the oracle. It holds a Pyth Lazer
 subscription, receives signed `evm`-format price updates over Lazer's WebSocket
 stream, decides which are worth relaying, and submits them to
@@ -144,15 +138,3 @@ npm run test:contract-symbol-price-reader
   confirmation — a mined-but-aborted tx (e.g. a monotonic-guard skip) can briefly
   drift the baseline until the next push corrects it. No confirmation tracking yet.
 - Single signing key from env; no key-management / secret-store integration.
-
-## Open questions (gating a production build)
-
-Commercial/legal answers needed from Pyth before operating a production relayer:
-
-1. Is **on-chain publication** of Lazer data to a public ledger permitted under
-   the subscription tier?
-2. Is **off-chain message proxying** to third parties allowed, or must each
-   consumer subscribe directly?
-3. What **tier / pricing** applies to an infrastructure relayer?
-
-See [`../clarity/PLAN.md`](../clarity/PLAN.md) for the contract side.
