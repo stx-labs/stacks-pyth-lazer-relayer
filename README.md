@@ -1,6 +1,6 @@
-# Pyth Lazer relayer
+# Stacks Pyth Lazer relayer
 
-A relayer is the off-chain half of the oracle. It holds a Pyth Lazer
+This relayer is the off-chain half of the oracle. It holds a Pyth Lazer
 subscription, receives signed `evm`-format price updates over Lazer's WebSocket
 stream, decides which are worth relaying, and submits them to
 [`pyth-lazer-oracle-v1.verify-and-update-price-feeds`](../clarity/contracts/pyth-lazer-oracle-v1.clar)
@@ -21,9 +21,10 @@ constructor injection (units read config from their options, not the environment
 | [`ContractSymbolPriceReader`](src/relayer/contract-symbol-price-reader.ts) | Read-only contract reads (on-chain price baselines, stale-price threshold). |
 
 A small [Fastify API](src/api) exposes `POST /pyth-lazer-relayer/v1/price-update` (also available at
-`POST /pyth-lazer-relayer/price-update`) with body `{ symbol }`, where `symbol` is a `Crypto.`-prefixed
-pair such as `Crypto.BTC/USD`, to add a pair to the monitored set and force an immediate on-demand push. Configuration is
-centralized and validated in
+`POST /pyth-lazer-relayer/price-update`) whose body carries **exactly one** of `symbol` — a
+`Crypto.`-prefixed pair such as `Crypto.BTC/USD` — or `feed_id`, a numeric Lazer feed id resolved to a
+symbol server-side. It adds the pair to the monitored set and forces an immediate on-demand push.
+Configuration is centralized and validated in
 [`src/env.ts`](src/env.ts).
 
 ```
@@ -130,6 +131,17 @@ npm run test:pyth-symbol-monitor
 npm run test:price-update-planner
 npm run test:price-update-transaction-submitter
 npm run test:contract-symbol-price-reader
+npm run test:price-update-route
+```
+
+### OpenAPI spec
+
+The API is described by an OpenAPI document generated from the route schemas
+([`src/api/schemas.ts`](src/api/schemas.ts)) via `@fastify/swagger`. Regenerate
+`openapi.yaml` after changing any route or schema:
+
+```sh
+npm run generate:openapi   # writes ./openapi.yaml
 ```
 
 ## Known limitations
