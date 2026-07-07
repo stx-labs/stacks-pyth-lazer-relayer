@@ -7,6 +7,6 @@ RUN apt-get update && \
     apt-get install -y git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-RUN npm ci --no-audit && npm run build && npm prune --production
+RUN npm ci --no-audit && npm run generate:git-info && npm run build && npm prune --production
 
 CMD ["node", "./dist/index.js"]
