@@ -3,7 +3,7 @@ info:
   title: Stacks Pyth Lazer Relayer API
   description: API reference for the Stacks Pyth Lazer Relayer API. Service that
     relays price updates from the Pyth Network to the Stacks blockchain.
-  version: 0.1.0
+  version: 0.2.0
 components:
   schemas: {}
 paths:
